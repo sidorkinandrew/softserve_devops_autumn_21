@@ -1,0 +1,39 @@
+sudo yum update -y
+sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+cat /etc/system-release
+sudo yum install -y httpd mariadb-server mc htop git
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo systemctl is-enabled httpd
+sudo usermod -a -G apache ec2-user
+groups
+sudo chown -R ec2-user:apache /var/www
+sudo chmod 2775 /var/www && find /var/www -type d -exec sudo chmod 2775 {} \;
+find /var/www -type f -exec sudo chmod 0664 {} \;
+sudo yum list installed httpd mariadb-server php-mysqlnd
+sudo systemctl start mariadb
+# sudo mysql_secure_installation
+sudo systemctl enable mariadb
+sudo yum install -y mod_ssl
+cd /etc/pki/tls/certs
+sudo ./make-dummy-cert localhost.crt
+cp localhost.crt ../private/localhost.key
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
+# MYSQL_PASS=`tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_{|}~' </dev/urandom | head -c 16  ; echo`
+MYSQL_MDPASS=`tr -dc 'A-Za-z0-9$%+' </dev/urandom | head -c 16  ; echo`
+mysql -u root -p$ROOT_DBPASS -e 'create database moodledb5; grant all privileges on moodledb.* to moodledbuser@localhost identified by "$MYSQL_MDPASS";\q;'
+mkdir /var/www/moodledata
+chown apache:apache /var/www/moodledata
+cd /var/www/html
+sudo yum install -y php-xml.x86-64 php-intl php-soap php-xmlrpc php-mbstring php-gd php-sodium php-opcache
+# git clone git://git.moodle.org/moodle.git
+cd /var/www/html
+wget https://download.moodle.org/download.php/direct/stable310/moodle-latest-310.zip
+unzip moodle-latest-310.zip
+rm -f moodle-latest-310.zip
+chown -R apache:apache /var/www/html/moodle
+cp /etc/my.cnf /etc/my.cnf.orig
