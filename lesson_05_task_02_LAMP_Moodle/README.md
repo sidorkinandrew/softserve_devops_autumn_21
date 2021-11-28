@@ -25,3 +25,4 @@ https://linoxide.com/how-to-install-moodle-on-ubuntu-20-04/
 - Tazik 2 (tazik2.swedencentral.cloudapp.azure.com / 20.91.139.140):
 * installed && configured MySQL 8.0
 https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-20-04-ru
+* created a bash script to dump moodle's DB into an SQL file in the format moodle_<currentdate_currenttime>.sql
