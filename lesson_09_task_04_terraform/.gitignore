@@ -1,0 +1,8 @@
+.ssh/*
+.tfstate
+.tfstate.backup
+.terraform.lock.hcl
+.terraform/*
+terraform.tfstate
+terraform.tfstate.backup
+backup/*
